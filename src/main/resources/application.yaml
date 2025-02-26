@@ -1,0 +1,7 @@
+weather:
+  scheduler:
+    thread-pool: 3
+    time-delay: 10
+
+
+
