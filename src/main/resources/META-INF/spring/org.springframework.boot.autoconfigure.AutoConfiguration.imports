@@ -1,4 +1,3 @@
 com.project.WeatherServiceConfiguration
-com.project.WeatherExceptionConfiguration
-com.project.WeatherSchedulerConfiguration
+com.project.WeatherStarterConfiguration
 com.project.WeatherSchedulerComponent

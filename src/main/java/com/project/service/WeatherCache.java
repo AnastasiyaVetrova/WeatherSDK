@@ -3,6 +3,7 @@ package com.project.service;
 import com.project.dto.WeatherResponse;
 import lombok.Getter;
 
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,7 +15,7 @@ public class WeatherCache {
     private static final int CACHE_TIME = 600;
 
     public boolean isCachedValid(WeatherResponse weatherResponse) {
-        return System.currentTimeMillis() / 1000 - weatherResponse.getDatetime() < CACHE_TIME;
+        return Instant.now().getEpochSecond() - weatherResponse.getTimeNow() < CACHE_TIME;
     }
 
     public void saveCacheWeather(String city, WeatherResponse weatherResponse) {
@@ -27,7 +28,7 @@ public class WeatherCache {
     public void removeOldCache() {
         cache.entrySet()
                 .stream()
-                .min(Comparator.comparing(a -> a.getValue().getDatetime()))
+                .min(Comparator.comparing(a -> a.getValue().getTimeNow()))
                 .ifPresent(a -> cache.remove(a.getKey()));
     }
 

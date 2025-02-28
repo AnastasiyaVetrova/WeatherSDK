@@ -3,34 +3,36 @@ package com.project;
 import com.project.exception.WeatherServiceInitializationException;
 import com.project.exception.WeatherServiceNotFoundException;
 import com.project.properties.ApiKey;
-import com.project.properties.WeatherKeyProperties;
+import com.project.properties.KeyProperties;
 import com.project.service.WeatherCache;
 import com.project.service.WeatherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@EnableConfigurationProperties(WeatherKeyProperties.class)
+@EnableConfigurationProperties(KeyProperties.class)
 @RequiredArgsConstructor
-@EnableScheduling
 public class WeatherServiceConfiguration implements WeatherServiceManager {
 
-    private final WeatherKeyProperties properties;
+    private final KeyProperties properties;
     private final Map<String, WeatherService> services = new HashMap<>();
+    private final WebClient webClient;
 
     @Bean
     public Map<String, WeatherService> weatherCacheConfiguration() {
+
         for (ApiKey apiKey : properties.getApiKeys()) {
             WeatherCache cache = new WeatherCache();
-            WeatherService weatherService = new WeatherService(cache, apiKey);
+            WeatherService weatherService = new WeatherService(webClient, cache, apiKey);
             this.services.put(apiKey.getApiKey(), weatherService);
         }
+
         return this.services;
     }
 

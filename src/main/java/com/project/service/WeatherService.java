@@ -16,19 +16,19 @@ public class WeatherService {
     @Getter
     private final TypeApiEnum type;
 
-    public WeatherService(WeatherCache weatherCache, ApiKey apiKey) {
-        webClient = WebClient.create();
+    public WeatherService(WebClient webClient, WeatherCache weatherCache, ApiKey apiKey) {
+        this.webClient = webClient;
         this.weatherCache = weatherCache;
         this.lang = apiKey.getLang();
         this.apiKey = apiKey.getApiKey();
         this.type = apiKey.getType();
-        this.urlWeather = "https://api.openweathermap.org/data/2.5/weather?q=%s&lang=%s&appid=%s";
+        this.urlWeather = "?q=%s&lang=%s&appid=%s";
     }
 
     public Mono<WeatherResponse> getWeather(String city) {
         return Mono.justOrEmpty(weatherCache.get(city))
                 .filter(weatherCache::isCachedValid)
-                .switchIfEmpty(fetchWeather(city));
+                .switchIfEmpty(Mono.defer(()->fetchWeather(city)));
     }
 
     private Mono<WeatherResponse> fetchWeather(String city) {
@@ -41,7 +41,6 @@ public class WeatherService {
     }
 
     public void updateWeatherData() {
-        System.out.println("Начало работы шедулера");
         weatherCache.getCache().forEach((key, value) -> fetchWeather(key).subscribe());
     }
 
