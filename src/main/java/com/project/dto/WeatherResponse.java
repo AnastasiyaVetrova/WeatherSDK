@@ -13,6 +13,12 @@ import lombok.Setter;
 
 import java.time.Instant;
 
+/**
+ * Класс, представляющий ответ от API погоды.
+ * <p>
+ * Содержит информацию о погоде, температуре, видимости, ветре, времени и других данных, полученных от сервера.
+ * Ответ автоматически десериализуется с использованием Jackson.
+ */
 @Setter
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)

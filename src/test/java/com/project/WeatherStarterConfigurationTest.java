@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.concurrent.ScheduledExecutorService;
 
 @ExtendWith(MockitoExtension.class)
-class SchedulerConfigurationTest {
+class WeatherStarterConfigurationTest {
     @Mock
     private WeatherSchedulerProperties properties;
 

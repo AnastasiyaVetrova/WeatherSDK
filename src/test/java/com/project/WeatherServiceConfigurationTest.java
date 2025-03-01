@@ -40,12 +40,12 @@ class WeatherServiceConfigurationTest {
         when(properties.getApiKeys()).thenReturn(apiKeys);
 
         configuration = new WeatherServiceConfiguration(properties, webClient);
-        configuration.weatherCacheConfiguration();
+        configuration.weatherServiceAndCacheConfiguration();
     }
 
     @Test
     void testWeatherCacheConfiguration_CreatesWeatherServices() {
-        Map<String, WeatherService> services = configuration.weatherCacheConfiguration();
+        Map<String, WeatherService> services = configuration.weatherServiceAndCacheConfiguration();
 
         assertThat(services).hasSize(2);
         assertThat(services).containsKeys("key1", "key2");
@@ -84,7 +84,7 @@ class WeatherServiceConfigurationTest {
 
     @Test
     void testRemoveWeatherService_RemovesService() {
-        Map<String, WeatherService> services = configuration.weatherCacheConfiguration();
+        Map<String, WeatherService> services = configuration.weatherServiceAndCacheConfiguration();
         configuration.removeWeatherService("key1");
 
         assertThat(services).hasSize(1);
